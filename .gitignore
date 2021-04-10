@@ -1,0 +1,8 @@
+*.jar
+/conf
+/.idea
+/.metadata
+/.settings
+/db
+/RemoteSystemsTempFiles
+/target
