@@ -29,9 +29,7 @@ public class GetJanus {
 
 	public static void main(String[] args) throws Exception {
 
-		JanusGraph gr = JanusGraphFactory.open("conf/hbase2.properties");
-//		GraphTraversalSource g = gr.traversal();		// running di awal untuk pembuatan config di hbase
-//		g.tx().commit();
+		JanusGraph gr = JanusGraphFactory.open(env.properties);
 
 //		JanusGraph gr = graph();
 //		GraphTraversalSource g = gr.traversal();		// running di awal untuk pembuatan config di hbase
@@ -54,7 +52,7 @@ public class GetJanus {
 				.buildMixedIndex("tes");
 		or.commit();
 
-		//pembuatan shema edge
+		//pembuatan schema edge
 //		JanusGraphManagement or = gr.openManagement();
 
 		PropertyKey id_edge = or.makePropertyKey("id_edge").dataType(String.class).make();

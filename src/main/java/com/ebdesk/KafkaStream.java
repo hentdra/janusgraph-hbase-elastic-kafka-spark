@@ -65,11 +65,10 @@ public class KafkaStream {
 	public static void main(String[] args) throws IOException, InterruptedException {
 
 //		String kafkaTopic = "sc-ig-follower";
-//		String broker = "192.168.114.198:6667,192.168.114.199:6667,192.168.114.200:6667";
-		String kafkaTopic = "criteria-twitter";
-		String broker = "192.168.114.60:6667,192.168.114.61:6667,192.168.114.62:6667";
-		String group = "hendra";
-		String offset = "earliest"; // latest, earliest, none
+		String kafkaTopic = env.topic;
+		String broker = env.broker;
+		String group = env.group;
+		String offset = env.offset;
 
 		// String kafkaTopic = args[0];
 		// String broker = args[1];
@@ -85,7 +84,7 @@ public class KafkaStream {
 		// .set("spark.mongodb.input.uri", mongoHostInput)
 		// .set("spark.mongodb.output.uri", mongoHostOutput);
 
-		SparkSession sparkSession = SparkSession.builder().master("local[*]").appName("KafkaStream")
+		SparkSession sparkSession = SparkSession.builder().master("local[4]").appName("KafkaStream")
 				.config(sparkConf).getOrCreate();
 
 		JavaStreamingContext jsc = new JavaStreamingContext(new JavaSparkContext(sparkSession.sparkContext()),
@@ -150,13 +149,13 @@ public class KafkaStream {
 
 						if (rdd.hasNext()) {
 
-							JanusGraph graph = JanusGraphFactory.open("/home/ubuntu/Documents/janusgraph-java-example/conf/sc-ig-following.properties");
+							JanusGraph graph = JanusGraphFactory.open(env.properties);
 
 							TransactionBuilder builder = graph.buildTransaction();
 							JanusGraphTransaction tx = builder.enableBatchLoading().consistencyChecks(false).start();
 							tx.tx().commit();
 
-							createSchema(graph, "ig-follow", true);
+							createSchema(graph, env.index_name, true);
 
 							System.out.println(new Date().toString());
 							while (rdd.hasNext()) {
